@@ -36,7 +36,6 @@ describe('Implemented testcase', () => {
               expect(data_val).has.all.keys([
                 'id',
                 'url',
-                'baseUrl',
                 'title',
                 'visits',
                 'updatedAt',
@@ -58,7 +57,6 @@ describe('Implemented testcase', () => {
       chai
         .request(app)
         .post('/links')
-        .set({ host: 'localhost:8080' })
         .send({
           url: 'https://velopert.com'
         })
@@ -71,7 +69,6 @@ describe('Implemented testcase', () => {
           expect(res.body).has.all.keys([
             'id',
             'url',
-            'baseUrl',
             'title',
             'visits',
             'updatedAt',
@@ -219,10 +216,10 @@ describe('Bare Minimum Requirements', () => {
           email: 'duhyun.kim@codestates.com',
           password: '1234'
         })
-        .then(function(res) {
+        .then(function (res) {
           agent
             .get('/user/info')
-            .then(function(res2) {
+            .then(function (res2) {
               // should get status 200, which indicates req.session existence.
               expect(res2).to.have.status(200);
               expect(res2.body).has.all.keys([
@@ -249,10 +246,10 @@ describe('Bare Minimum Requirements', () => {
           email: 'foo@gmail.com',
           password: 'swiss'
         })
-        .then(function(res) {
+        .then(function (res) {
           agent
             .get('/user/info')
-            .then(function(res2) {
+            .then(function (res2) {
               // should get status 200, which indicates req.session existence.
               expect(res2).to.have.status(401);
               expect(res2.text).to.equal('need user session');
@@ -270,7 +267,6 @@ describe('Bare Minimum Requirements', () => {
       chai
         .request(app)
         .post('/user/signout')
-        .set({ host: 'localhost:8080' })
         .end((err, res) => {
           if (err) {
             done(err);

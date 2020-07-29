@@ -1,11 +1,10 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
-const userRouter = require('./routes/user');
+const usersRouter = require('./routes/users');
 const linksRouter = require('./routes/links');
 
 const { urls } = require('./models');
@@ -24,8 +23,8 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: ['http://localhost:3000'],
@@ -35,7 +34,7 @@ app.use(
 );
 
 // ? POSTMAN을 통한 test에 필요할지도 모릅니다. logging을 활용하세요.
-//app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 // TODO : GET / 요청에 대한 응답을 작성해주세요. (api 구현을 가볍게 시작해보세요.)
 // app. ...
@@ -63,12 +62,12 @@ app.get('/D*', (req, res) => {
     });
 });
 
-app.use('/user', userRouter);
+app.use('/user', usersRouter);
 app.use('/links', linksRouter);
 
 app.set('port', port);
 app.listen(app.get('port'), () => {
-  //console.log(`app is listening in PORT ${app.get('port')}`);
+  console.log(`app is listening in PORT ${app.get('port')}`);
 });
 
 module.exports = app;

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './LinkItem.css';
 
+const baseUrl = process.env.baseUrl || 'localhost:3001'
+
 class LinkItem extends Component {
   render() {
-    const { title, url, baseUrl, code, visits } = this.props;
+    const { title, url, code, visits } = this.props;
 
     return (
       <div className="link-item">

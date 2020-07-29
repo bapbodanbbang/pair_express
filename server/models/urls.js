@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     'urls',
     {
       url: DataTypes.STRING,
-      baseUrl: DataTypes.STRING,
       code: DataTypes.STRING,
       title: DataTypes.STRING,
       visits: {
@@ -27,6 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  urls.associate = function(models) {};
+  urls.associate = function (models) { };
   return urls;
 };

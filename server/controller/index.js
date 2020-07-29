@@ -1,4 +1,4 @@
 module.exports = {
   linksController: require('./links'),
-  userController: require('./user')
+  usersController: require('./users')
 };

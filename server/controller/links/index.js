@@ -37,7 +37,6 @@ module.exports = {
             url: url
           },
           defaults: {
-            baseUrl: req.headers.host,
             title: title
           }
         })

@@ -4,7 +4,6 @@ node_js:
 services:
   - mysql
 before_script:
-  - cd ./server
+  - cd server
   - npm ci
-after_script:
-  - node .travis/submit.js
+  - mysql -u root --password="" -e "create database shortly"
