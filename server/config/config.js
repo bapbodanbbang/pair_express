@@ -5,6 +5,6 @@ module.exports = {
     database: 'shortly',
     host: 'localhost',
     dialect: 'mysql',
-    logging: false
-  }
+    logging: false,
+  },
 };
