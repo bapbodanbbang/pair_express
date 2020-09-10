@@ -27,17 +27,22 @@ module.exports = {
       defaults: {
         email: userData.email,
         username: userData.username,
-        password: userData.passsword
+        password: userData.password
       }
     }).then(
-      (userTable, created) => {
-        if (created) {
-          res.send(userTable)
+      (value) => {
+        // console.log(value[0].dataValues)
+        let justAddedUser = value[0].dataValues;
+        let isCreated = value[1];
+        if (isCreated) {
+          res.send(justAddedUser)
+        } else {
+          res.status(409).send('Already exists user')
         }
       }
     )
     // where clause 로 찾은 결과물의 Boolean type value 에 따른 조건문 분기 
-    // if (created) {
+    // if (created) {s
     //   res.send(
     //     res.status(200).send(users.findAll({
     //       where: {
@@ -48,15 +53,15 @@ module.exports = {
     // } else {
     //   res.status(409).send('Already exists user')
     // }
-    let findData = users.findAll({
-      where: {
-        email: userData.email
-      }
-    }).then(
-      if (findData) {
+    // let findData = users.findAll({
+    //   where: {
+    //     email: userData.email
+    //   }
+    // }).then(
+    //   if (findData) {
 
-      }
-    )
-    res.end();
+    //   }
+    // )
+    // res.end();
   }
 };
