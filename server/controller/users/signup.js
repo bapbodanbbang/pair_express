@@ -31,7 +31,6 @@ module.exports = {
       }
     }).then(
       (value) => {
-        // console.log(value[0].dataValues)
         let justAddedUser = value[0].dataValues;
         let isCreated = value[1];
         if (isCreated) {
