@@ -31,7 +31,7 @@ module.exports = {
               'req.session',
               (req.session.userid = justLoggedUser.id)
             );
-            // req.session.userid = justLoggedUser.id;
+            req.session.userid = justLoggedUser.id;
             res.send({ id: req.session.userid });
             // 경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
           } else {
