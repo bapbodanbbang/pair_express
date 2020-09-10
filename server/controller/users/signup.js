@@ -11,56 +11,23 @@ module.exports = {
      *  4-1. "이미 존재한다" 의 기준은, DB에 email 이 이미 존재하는 경우를 의미한다.
      */
     let userData = req.body;
-    // users.create({
-    //   email: userData.email,
-    //   username: userData.username,
-    //   password: userData.password
-    // }).then(
-    //   res.status(200).send(users.findAll({
-    //     WHERE: {
-    //       username: userData.username
-    //     }
-    //   }))
-    // )
     users
       .findOrCreate({
-        where: { email: userData.email },
+        where: {
+          email: userData.email,
+        },
         defaults: {
           email: userData.email,
           username: userData.username,
           password: userData.password,
         },
       })
-      .then((value) => {
-        let justAddedUser = value[0].dataValues;
-        let isCreated = value[1];
-        if (isCreated) {
-          res.send(justAddedUser);
-        } else {
+      .then(([find, created]) => {
+        if (!created) {
           res.status(409).send('Already exists user');
+        } else {
+          res.status(200).send(find);
         }
       });
-    // where clause 로 찾은 결과물의 Boolean type value 에 따른 조건문 분기
-    // if (created) {s
-    //   res.send(
-    //     res.status(200).send(users.findAll({
-    //       where: {
-    //         email: userData.email
-    //       }
-    //     }))
-    //   )
-    // } else {
-    //   res.status(409).send('Already exists user')
-    // }
-    // let findData = users.findAll({
-    //   where: {
-    //     email: userData.email
-    //   }
-    // }).then(
-    //   if (findData) {
-
-    //   }
-    // )
-    // res.end();
   },
 };

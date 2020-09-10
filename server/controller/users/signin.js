@@ -1,5 +1,4 @@
 const { users } = require('../../models');
-var session = require('express-session');
 
 module.exports = {
   post: (req, res) => {
@@ -8,36 +7,42 @@ module.exports = {
      * 1. POST 요청이 /user/signin 으로 날아오는 것을 핸들링하라
      *  email, password 라는 Key 를 담은 형태로 날아옴
      * 2. 그렇게 받은 값을 통해서 validity 를 검증하라
-     *  경우1. email 자체가 존재하지 않는 경우
-     *  경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
-     *  경우3. email 와 pw 가 전부 올바른 경우
-     * 3. 경우1, 경우2 => 'unvalid user' 라는 메시지와 함께 404 status code response
-     *    경우3 => 해당 user record 에서 id 항목을 return 한다
+     *  email. password가 모두 일치하는 값만 data로 전달됨
+     *  그러므로 data 가 있다면? -> req.session.userid에 data의 id 값 할당 후 응답
+     *  data 가 없다면 404와 'unvalid user' 응답
      */
     let userData = req.body;
     users
       .findOne({
-        where: { email: userData.email },
+        where: {
+          email: userData.email,
+          password: userData.password,
+        },
       })
-      .then((val) => {
-        // 경우1. email 자체가 존재하지 않는 경우
-        if (val === null) {
-          res.status(404).send('unvalid user');
+      .then((data) => {
+        // console.log('findOne data', data); // dataValues...등등
+        // console.log('data.dataValues.id', data.dataValues.id); // 아이디 정상출력
+        // console.log('data.id', data.id); // 아이디 정상출력
+
+        if (data) {
+          req.session.userid = data.id;
+          console.log(req.session.userid);
+          res.send({ id: req.session.userid });
         } else {
-          let justLoggedUser = val.dataValues;
-          // 경우3. email 와 pw 가 전부 올바른 경우
-          if (justLoggedUser.password === userData.password) {
-            console.log(
-              'req.session',
-              (req.session.userid = justLoggedUser.id)
-            );
-            req.session.userid = justLoggedUser.id;
-            res.send({ id: req.session.userid });
-            // 경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
-          } else {
-            res.status(404).send('unvalid user');
-          }
+          res.status(404).send('unvalid user');
         }
+
+        // if (data === null) {
+        //   // 일치하는 데이터가 없으면
+        //   res.status(404).send('unvalid user');
+        // } else {
+        //   // 일치하는 데이터 있음
+        //   if (req.session.userid === undefined) {
+        //     // 세션 아이디가 없음
+        //     req.session.userid = data.dataValues.id;
+        //   }
+        //   res.json(data);
+        // }
       });
   },
 };
