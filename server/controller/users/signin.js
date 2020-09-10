@@ -1,4 +1,5 @@
 const { users } = require('../../models');
+var session = require('express-session');
 
 module.exports = {
   post: (req, res) => {
@@ -9,28 +10,34 @@ module.exports = {
      * 2. 그렇게 받은 값을 통해서 validity 를 검증하라
      *  경우1. email 자체가 존재하지 않는 경우
      *  경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
-     *  경우3. email 와 pw 가 전부 올바른 경우 
+     *  경우3. email 와 pw 가 전부 올바른 경우
      * 3. 경우1, 경우2 => 'unvalid user' 라는 메시지와 함께 404 status code response
-     *    경우3 => 해당 user record 에서 id 항목을 return 한다 
+     *    경우3 => 해당 user record 에서 id 항목을 return 한다
      */
-    let userData = req.body
-    users.findOne({
-      where: { email: userData.email }
-    }).then(
-      (val) => {
+    let userData = req.body;
+    users
+      .findOne({
+        where: { email: userData.email },
+      })
+      .then((val) => {
         // 경우1. email 자체가 존재하지 않는 경우
         if (val === null) {
-          res.status(404).send('unvalid user')
-        } else { 
-        let justLoggedUser = val.dataValues
-        // 경우3. email 와 pw 가 전부 올바른 경우 
-        if (justLoggedUser.password === userData.password) {
-          res.send({id : justLoggedUser.id})
-          // 경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
+          res.status(404).send('unvalid user');
         } else {
-          res.status(404).send('unvalid user')
-        }}
-      }
-    )
-  }
+          let justLoggedUser = val.dataValues;
+          // 경우3. email 와 pw 가 전부 올바른 경우
+          if (justLoggedUser.password === userData.password) {
+            console.log(
+              'req.session',
+              (req.session.userid = justLoggedUser.id)
+            );
+            // req.session.userid = justLoggedUser.id;
+            res.send({ id: req.session.userid });
+            // 경우2. email 는 존재하는데 올바르지 않는 pw 를 입력한 경우
+          } else {
+            res.status(404).send('unvalid user');
+          }
+        }
+      });
+  },
 };
