@@ -5,12 +5,13 @@ const { users } = require('../../models');
 // 맞으면 200
 // 아니면 401, 'need user session'
 module.exports = {
-  get: (req, res) => {
-    if (req.session.userid) {
+  get: async (req, res) => {
+    let userSession = await req.session;
+    if (userSession.userid) {
       users
         .findOne({
           where: {
-            id: req.session.userid,
+            id: userSession.userid,
           },
         })
         .then((data) => {

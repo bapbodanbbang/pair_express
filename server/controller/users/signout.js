@@ -9,7 +9,7 @@ module.exports = {
 
     if (req.session.userid) {
       // session.userid 있다면
-      res.session.destoy((err) => {
+      res.session.destroy((err) => {
         // 세션삭제
         if (err) {
           console.log(err);
